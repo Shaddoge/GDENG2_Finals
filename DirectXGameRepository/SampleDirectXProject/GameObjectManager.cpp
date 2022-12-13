@@ -115,8 +115,8 @@ void GameObjectManager::CreatePhysicsCubes(int amount)
 
         if (TransformComponent* transform = cube->GetTransform())
         {
-            float rand = std::rand() % 5;
-            transform->SetPosition({ rand, 5, rand });
+            SimpleMath::Vector3 rand_position = SimpleMath::Vector3(((rand() % 200) - 100) / 150.0f, ((rand() % 200) - 100) / 150.0f, ((rand() % 200) - 100) / 150.0f);
+            transform->SetPosition(rand_position);
         }
     }
 }
