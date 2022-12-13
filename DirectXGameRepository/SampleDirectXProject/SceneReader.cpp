@@ -90,7 +90,7 @@ void SceneReader::ReadFromFile()
 	{
 		hasPhysics = (bool)root[id]["hasPhysics"].asInt();
 		objectName = root[id]["name"].asString();
-		position =	{ root[id]["position"][0]["x"].asFloat(), root[id]["position"][0]["y"].asFloat(), root[id]["position"][0]["z"].asFloat() };
+		position =	{ root[id]["position"][0]["x"].asFloat(), root[id]["position"][0]["y"].asFloat(), -root[id]["position"][0]["z"].asFloat() };
 		rotation =	{ root[id]["rotation"][0]["x"].asFloat(), root[id]["rotation"][0]["y"].asFloat(), root[id]["rotation"][0]["z"].asFloat() };
 		scale =	{ root[id]["scale"][0]["x"].asFloat(), root[id]["scale"][0]["y"].asFloat(), root[id]["scale"][0]["z"].asFloat() };
 		objectType = (PrimitiveType)root[id]["type"].asInt();

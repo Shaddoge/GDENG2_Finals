@@ -67,7 +67,7 @@ void SceneWriter::WriteToFile()
 
 		posVal["x"] = position.x;
 		posVal["y"] = position.y;
-		posVal["z"] = position.z;
+		posVal["z"] = -position.z;
 
 		Json::Value rotVal;
 
@@ -88,7 +88,12 @@ void SceneWriter::WriteToFile()
 		root[I]["position"].append(posVal);
 		root[I]["rotation"].append(rotVal);
 		root[I]["scale"].append(sclVal);
-		root[I]["hasPhysics"] = (bool)allObjects[i]->GetComponent<PhysicsComponent>();
+
+		PhysicsComponent* physComponent = allObjects[i]->GetComponent<PhysicsComponent>();
+		if (physComponent != nullptr && physComponent->GetRigidbody()->getType() == reactphysics3d::BodyType::DYNAMIC)
+			root[I]["hasPhysics"] = true;
+		else
+			root[I]["hasPhysics"] = false;
 	}
 	writer->write(root, &std::cout);
 	sceneFile << root;

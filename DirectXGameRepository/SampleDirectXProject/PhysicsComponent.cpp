@@ -45,6 +45,7 @@ void PhysicsComponent::Start()
 	GetOwner()->GetTransform()->SetPhysicsMatrix(matrix);
 }
 
+
 void PhysicsComponent::Update(float deltaTime)
 {
 	if (EngineBackend::Get()->GetMode() != EditorMode::PLAY)
@@ -57,6 +58,18 @@ void PhysicsComponent::Update(float deltaTime)
 	const auto pos = transform.getPosition();
 
 	GetOwner()->GetTransform()->SetPhysicsMatrix(matrix);
+}
+
+void PhysicsComponent::ChangeBodyType(int type)
+{
+	if (type == 0)
+	{
+		this->rigidBody->setType(BodyType::DYNAMIC);
+	}
+	else if (type == 1)
+	{
+		this->rigidBody->setType(BodyType::KINEMATIC);
+	}
 }
 
 RigidBody* PhysicsComponent::GetRigidbody()

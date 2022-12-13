@@ -56,6 +56,7 @@ public class Parser
                 GameObject newPrimitive = GameObject.CreatePrimitive((PrimitiveType)primitiveData.type);
 
                 // Set primitive datas
+                newPrimitive.name = primitiveData.name;
                 newPrimitive.transform.position = primitiveData.position[0];
                 newPrimitive.transform.eulerAngles = primitiveData.rotation[0];
                 newPrimitive.transform.localScale = primitiveData.scale[0];
@@ -83,6 +84,7 @@ public class Parser
         {
             GameObject obj = gameObjects[i];
             MeshFilter meshFilter = obj.GetComponent<MeshFilter>();
+            Debug.Log(meshFilter == null);
             if (meshFilter == null) continue;
             Debug.Log(meshFilter.sharedMesh.name);
 
@@ -90,23 +92,23 @@ public class Parser
             bool isPrimitive = true;
             int primType = 0;
                 
-            if (meshFilter.sharedMesh.name == "Sphere Instance")
+            if (meshFilter.sharedMesh.name == "Sphere")
             {
                 primType = 0;
             }
-            else if (meshFilter.sharedMesh.name == "Capsule Instance")
+            else if (meshFilter.sharedMesh.name == "Capsule")
             {
                 primType = 1;
             }
-            else if (meshFilter.sharedMesh.name == "Cylinder Instance")
+            else if (meshFilter.sharedMesh.name == "Cylinder")
             {
                 primType = 2;
             }
-            else if (meshFilter.sharedMesh.name == "Cube Instance")
+            else if (meshFilter.sharedMesh.name == "Cube")
             {
                 primType = 3;
             }
-            else if (meshFilter.sharedMesh.name == "Plane Instance")
+            else if (meshFilter.sharedMesh.name == "Plane")
             {
                 primType = 4;
             }
@@ -115,7 +117,7 @@ public class Parser
                 isPrimitive = false;
             }
 
-            if (!isPrimitive) continue;
+            if (isPrimitive == false) continue;
 
                 
             Primitive primitive = new Primitive()
@@ -134,10 +136,11 @@ public class Parser
 
             string primitiveData = JsonUtility.ToJson(primitive);
             dataToSave = dataToSave + $"\"{gameObjectCount.ToString()}\" : " + primitiveData + ",";
-
+            
             gameObjectCount++;
         }
         dataToSave = dataToSave + "}";
+        Debug.Log(dataToSave);
         string filePath = EditorUtility.OpenFolderPanel("Save data location", "", "");
         File.WriteAllText(filePath + "/testUnitySave.level", dataToSave);
     }

@@ -105,16 +105,32 @@ void GameObjectManager::CreateCubes(int amount)
     }
 }
 
+void GameObjectManager::CreatePhysicsCubes(int amount)
+{
+    for (int i = 0; i < amount; i++)
+    {
+        GameObject* cube = CreateCube();
+        PhysicsComponent* component = new PhysicsComponent();
+        cube->AttachComponent(component);
+
+        if (TransformComponent* transform = cube->GetTransform())
+        {
+            float rand = std::rand() % 5;
+            transform->SetPosition({ rand, 5, rand });
+        }
+    }
+}
+
 GameObject* GameObjectManager::CreatePlane()
 {
     GameObject* plane = GameObject::Instantiate(NAME_PLANE);
     plane->SetObjectType(PrimitiveType::PLANE);
     if (TransformComponent* transform = plane->GetTransform())
     {
-        transform->SetScale({ 5, 0.1f, 5 });
+        transform->SetScale({ 1, 0.1f, 1 });
     }
 
-    Mesh* mesh = GraphicsEngine::get()->getMeshManager()->CreateMeshFromFile(L"Assets\\Meshes\\box.obj");
+    Mesh* mesh = GraphicsEngine::get()->getMeshManager()->CreateMeshFromFile(L"Assets\\Meshes\\plane.obj");
     //Texture* texture = GraphicsEngine::get()->getTextureManager()->CreateTextureFromFile(L"Assets\\Textures\\brick.png");
 
     if (mesh)

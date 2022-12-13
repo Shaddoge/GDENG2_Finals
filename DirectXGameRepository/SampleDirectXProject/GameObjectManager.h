@@ -29,6 +29,7 @@ public:
 	void CreateGameObject();
 	GameObject* CreateCube();
 	void CreateCubes(int amount);
+	void CreatePhysicsCubes(int amount);
 	GameObject* CreatePlane();
 	void CreateTeapot();
 	void CreateBunny();

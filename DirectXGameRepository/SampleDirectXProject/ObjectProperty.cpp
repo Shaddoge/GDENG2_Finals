@@ -97,6 +97,16 @@ void ObjectProperty::DrawUI()
 		// Existing physics component
 		if (selectedObj->GetComponent<PhysicsComponent>() != NULL)
 		{
+			if (ImGui::Button("Dynamic"))
+			{
+				selectedObj->GetComponent<PhysicsComponent>()->ChangeBodyType(0);
+			}
+
+			if (ImGui::Button("Kinematic"))
+			{
+				selectedObj->GetComponent<PhysicsComponent>()->ChangeBodyType(1);
+			}
+
 			if (ImGui::Button("Detach Physics Component"))
 			{
 				selectedObj->DetachComponent(selectedObj->GetComponent<PhysicsComponent>());

@@ -13,7 +13,9 @@ public:
 public:
 	void Start() override;
 	void Update(float deltaTime) override;
+	void ChangeBodyType(int type);
 	RigidBody* GetRigidbody();
+	
 private:
 	RigidBody* rigidBody = nullptr;
 };

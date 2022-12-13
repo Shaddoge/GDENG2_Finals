@@ -69,6 +69,10 @@ void MenuBar::DrawUI()
                 {
                     GameObjectManager::Get()->CreateCubes(10);
                 }
+                if (ImGui::MenuItem("50 Physics Cubes"))
+                {
+                    GameObjectManager::Get()->CreatePhysicsCubes(50);
+                }
                 if (ImGui::MenuItem("Plane"))
                 {
                     GameObjectManager::Get()->CreatePlane();

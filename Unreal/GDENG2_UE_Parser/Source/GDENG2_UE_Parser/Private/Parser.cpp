@@ -37,7 +37,7 @@ TArray<AMyPrimitive*> UParser::Load(FString fileName)
 			AMyPrimitive* primitive = GetWorld()->SpawnActor<AMyPrimitive>(AMyPrimitive::StaticClass());
 
 			TArray<TSharedPtr<FJsonValue>> posArray = currObj->GetArrayField("position");
-			FVector pos = FVector(posArray[0]->AsObject()->GetNumberField("x"), posArray[0]->AsObject()->GetNumberField("z"), posArray[0]->AsObject()->GetNumberField("y"));
+			FVector pos = FVector(posArray[0]->AsObject()->GetNumberField("x"), -posArray[0]->AsObject()->GetNumberField("z"), posArray[0]->AsObject()->GetNumberField("y"));
 			primitive->SetActorLocation(pos * 100.0f);
 
 			TArray<TSharedPtr<FJsonValue>> rotArray = currObj->GetArrayField("rotation");
@@ -47,7 +47,11 @@ TArray<AMyPrimitive*> UParser::Load(FString fileName)
 
 			TArray<TSharedPtr<FJsonValue>> scaleArray = currObj->GetArrayField("scale");
 			FVector scale = FVector(scaleArray[0]->AsObject()->GetNumberField("x"), scaleArray[0]->AsObject()->GetNumberField("z"), scaleArray[0]->AsObject()->GetNumberField("y"));
-			primitive->SetActorRelativeScale3D(scale);
+			
+			if ((EnumPrimitiveType)currObj->GetIntegerField("type") == EnumPrimitiveType::Plane)
+				primitive->SetActorRelativeScale3D(scale * 10.0f);
+			else
+				primitive->SetActorRelativeScale3D(scale);
 			//primitive->SetActorScale3D(scale);
 			//AMyPrimitive* primitive = GetWorld()->SpawnActorDeferred<AMyPrimitive>(AMyPrimitive::StaticClass(), FTransform(rot, pos, scale));
 			
@@ -83,13 +87,17 @@ void UParser::Save(FString fileName, TArray<AMyPrimitive*> myPrimitives)
 		jsonString += CreateStringJsonObject("name");
 		jsonString += "\"" + myPrimitive->GetActorLabel() + "\",";
 		jsonString += CreateStringJsonObject("position");
-		jsonString += CreateArrayFromVector(myPrimitive->GetActorLocation() / 100.0f) + ",";
+		FVector pos = myPrimitive->GetActorLocation() / 100.0f;
+		jsonString += CreateArrayFromVector(FVector(pos.X, -pos.Y, pos.Z)) + ",";
 		jsonString += CreateStringJsonObject("rotation");
 
 		FVector rotDeg = FVector(myPrimitive->GetActorRotation().Pitch, myPrimitive->GetActorRotation().Roll, myPrimitive->GetActorRotation().Yaw);
 		jsonString += CreateArrayFromVector(FVector(FMath::DegreesToRadians(rotDeg.X), FMath::DegreesToRadians(rotDeg.Y), FMath::DegreesToRadians(rotDeg.Z))) + ",";
 		jsonString += CreateStringJsonObject("scale");
-		jsonString += CreateArrayFromVector(myPrimitive->GetActorScale()) + ",";
+		if (myPrimitive->primitiveType == EnumPrimitiveType::Plane)
+			jsonString += CreateArrayFromVector(myPrimitive->GetActorScale() / 10.0f) + ",";
+		else
+			jsonString += CreateArrayFromVector(myPrimitive->GetActorScale()) + ",";
 		jsonString += CreateStringJsonObject("type");
 		jsonString += FString::FromInt((int)myPrimitive->primitiveType);
 		jsonString += "},";
